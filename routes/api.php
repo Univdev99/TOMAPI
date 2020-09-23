@@ -50,5 +50,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/professional/project/history', 'ProfessionalController@projectHistory');
         Route::get('/professional/project/complete', 'ProfessionalController@projectComplete');
         Route::get('/professional/workExp/expWithSkill', 'ProfessionalController@workExpWithSkill');
+
+        Route::post('/component/select/soft_search', 'ComponentController@softSearch');
     });
  });
