@@ -14,8 +14,9 @@ class ProfessionalController extends Controller
         dd($data);
     }
 
-    public function personalProfileGet() {
-    
+    public function personalProfileGet(Request $request) {
+        $info = $request->json()->get('proProfileId');
+        
     }
 
     public function personalProfileSave() {
@@ -26,14 +27,13 @@ class ProfessionalController extends Controller
         //Show after login user as Pro
 
         $pro_file_id = $request->json()->get('PRO_PROFILE_ID');
-        $proWork = ProWorkAvailability::where('professionalProfileId', $pro_file_id);
+        $proWork = ProWorkAvailability::where('professionalProfileId', $pro_file_id)->first();
 
-        
         $response = [
             "apiCode" => 200,
             "message" => "",
             "exceptionWrappers" => null,
-            "data" => $proWork->first()
+            "data" => $proWork
         ];
         return response()->json($response)
             ->header('Access-Control-Expose-Headers', 'X-Auth-Token, filename')
@@ -43,23 +43,21 @@ class ProfessionalController extends Controller
 
     public function workAvailSave(Request $request) {
 
-        $proWorkAvail = $request->json();
-        $pro_file_id = $request->json()->get('proWorkAvailability')['professionalProfileId'];
-
+        $info = $request->json()->get('proWorkAvailability');
+        $proWork = ProWorkAvailability::create([
+            "StartDate" => $info["startDate"],
+            "LastDate" => $info["lastDate"],
+            "DateRange" => null,
+            "WorkAvailability" => $info["workAvailability"],
+            "LocationAvailability" => $info["locationAvailability"],
+            "isFullTime" => $info["isFullTime"],
+            "professionalProfileId" => $info['professionalProfileId']
+        ]);
         $response = [
             "apiCode" => 200,
             "message" => "",
             "exceptionWrappers" => null,
-            "data" => [
-                "proWorkAvailabilityId" => 50,
-                "startDate" => null,
-                "lastDate" => null,
-                "dateRange" => null,
-                "workAvailability" => null,
-                "locationAvailability" => null,
-                "isFullTime" => null,
-                "professionalProfileId" => 42
-            ]   
+            "data" => $proWork
         ];
 
         return response()->json($response)

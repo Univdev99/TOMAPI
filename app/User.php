@@ -16,7 +16,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'firstName',
+        'lastName',
+        'password',
+        'roleId',
+        'workEmail'
     ];
 
     /**
@@ -38,4 +42,8 @@ class User extends Authenticatable
     ];
 
     protected $table = 'HADMIN.UserTable';
+    public $timestamps = false;
+
+    const CREATED_AT = 'createdDate';
+    const UPDATED_AT = 'modifiedDate';
 }

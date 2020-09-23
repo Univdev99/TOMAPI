@@ -2,37 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\FirmProfile;
+use App\ProfessionalProfile;
+use App\User;
 use Illuminate\Http\Request;
+use Config;
 
 class RegisterController extends Controller
 {
     
     public function register(Request $request) {
+        $info = $request->json()->get('user');
+        $roleId = $info['roleId'];
+        $user = User::updateOrCreate(['workEmail' => $info['workEmail']],[
+            'firstName' => $info['firstName'],
+            'lastName' => $info['lastName'],
+            'password' => md5($info['password']),
+            'roleId' => $info['roleId']
+        ]);
+        $data = null;
+        if($roleId == config('constant.FIRM_USER_TYPE')) {
+            $firm = FirmProfile::updateOrCreate(['UserId' => $user->id,], [
+                'FirstName' => $info['firstName'],
+                'LastName' => $info['lastName'],
+                'WorkEmail' => $info['workEmail'],
+                'BusinessName' => $info['businessName']
+            ]);
+            $data = [
+                "firmProfileId" => $firm->id,
+                "user" => $user
+            ];
+        } else if ($roleId == config('constant.PRO_USER_TYPE')) {
+            $pro = ProfessionalProfile::updateOrCreate(['UserId' => $user->id], [
+                'FirstName' => $info['firstName'],
+                'LastName' => $info['lastName']
+            ]);
+            $data = [
+                "proProfileId" => $pro->id,
+                "user" => $user
+            ];
+        }
         $response = json_encode([
             "apiCode"  =>  200,
             "message"  =>  "User saved successfully",
             "exceptionWrappers" => null,
-            "data" =>  [
-                "proProfileId" => 37,
-                "user" => [
-                    "userId" => 213,
-                    "firstName" => "asdfasdf",
-                    "lastName" => "asdf",
-                    "password" => "92429d82a41e930486c6de5ebda9602d55c39986",
-                    "workEmail" => "asdf@asdf.com",
-                    "businessName" => null,
-                    "category" => null,
-                    "roleId" => 3,
-                    "status" => false,
-                    "userStatus" => null,
-                    "forgotToken" => null,
-                    "forgotTokenTime" => null,
-                    "createdById" => null,
-                    "modifiedById" => null,
-                    "createdDate" => 1600734923000,
-                    "modifiedDate" => 1600734923000
-                ]
-            ]
+            "data" =>  $data
         ]);
         return response($response)
             ->header('Access-Control-Expose-Headers', 'X-Auth-Token, filename')
