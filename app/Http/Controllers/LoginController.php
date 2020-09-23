@@ -17,7 +17,6 @@ class LoginController extends Controller
 
         $user = User::where('workEmail', $email)->first();
         $data = null;
-        
         if($user->roleId == env('FIRM_USER_TYPE')) {
             $profile = FirmProfile::where('UserId', $user->userId)->first();
             $data = [
@@ -39,7 +38,7 @@ class LoginController extends Controller
             "exceptionWrappers" => null,
             "data" => $data
         ];
-        return response()->json($response)
+        return response()->json($response, 200, [], JSON_NUMERIC_CHECK)
             ->header('Access-Control-Expose-Headers', 'X-Auth-Token, filename')
             ->header('Expires', 0)
             ->header('Pragma', 'no-cache')

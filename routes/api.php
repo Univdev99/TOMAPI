@@ -54,3 +54,4 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/component/select/soft_search', 'ComponentController@softSearch');
     });
  });
+
