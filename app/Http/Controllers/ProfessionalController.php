@@ -51,15 +51,28 @@ class ProfessionalController extends Controller
     }
 
     public function workExpGet() {
+        $db = \DB::select("SELECT distinct SMT.masterSkillName,SMT.proSkillMasterId,SCT.categorySkillName,SCT.proSkillCategoryId,  SDT.detailSkillName,SDT.proSkillDetailId
+        from HADMIN.ProSkillMasterTable SMT 
+        LEFT JOIN HADMIN.ProSkillTable PST on PST.ProSkillMasterId = SMT.ProSkillMasterId
+        LEFT JOIN HADMIN.ProSkillCategoryTable SCT on PST.ProSkillCategoryId = SCT.ProSkillCategoryId
+        LEFT JOIN HADMIN.ProSkillDetailTable SDT on SDT.proSkillDetailId = PST.proSkillDetailId
+        WHERE PST.proWorkExperienceId = proWorkExperienceId;");
 
+        return $this->result($db);
     }
 
     public function workExpSave() {
-
+        return $this->result("next");
     }
 
     public function treeGet() {
+        $db = \DB::select("SELECT distinct SMT.masterSkillName,SMT.proSkillMasterId,SCT.categorySkillName,SCT.proSkillCategoryId,SDT.detailSkillName,SDT.proSkillDetailId
+        from HADMIN.ProSkillMasterTable as SMT
+        LEFT JOIN HADMIN.ProSkillCategoryTable as SCT on SCT.ProSkillMasterId = SMT.ProSkillMasterId
+        LEFT JOIN HADMIN.ProSkillDetailTable AS SDT on SDT.ProSkillCategoryId = SCT.ProSkillCategoryId  AND  SMT.ProSkillMasterId = SDT.ProSkillMasterId
+        ORDER BY MasterSkillName ,CategorySkillName, DetailSkillName;");
 
+        return $this->result($db);
     }
 
     public function search() {

@@ -43,7 +43,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/professional/workExp/save', 'ProfessionalController@workExpSave');
 
         Route::post('/professional/tree/get', 'ProfessionalController@treeGet');
-        
+
         Route::get('/professional/search', 'ProfessionalController@search');
         Route::get('/professional/getWholeProfile', 'ProfessionalController@getWholeProfile');
         Route::get('/professional/job/get', 'ProfessionalController@jobGet');
