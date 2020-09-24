@@ -22,33 +22,35 @@ class RegisterController extends Controller
         ]);
         $data = null;
         if($roleId == config('constant.FIRM_USER_TYPE')) {
-            $firm = FirmProfile::updateOrCreate(['UserId' => $user->id,], [
+            $firm = FirmProfile::updateOrCreate(['UserId' => $user->userId,], [
                 'FirstName' => $info['firstName'],
                 'LastName' => $info['lastName'],
                 'WorkEmail' => $info['workEmail'],
                 'BusinessName' => $info['businessName']
             ]);
             $data = [
-                "firmProfileId" => $firm->id,
+                "firmProfileId" => $firm->FirmProfileId,
                 "user" => $user
             ];
         } else if ($roleId == config('constant.PRO_USER_TYPE')) {
-            $pro = ProfessionalProfile::updateOrCreate(['UserId' => $user->id], [
+            $pro = ProfessionalProfile::updateOrCreate(['UserId' => $user->userId], [
                 'FirstName' => $info['firstName'],
                 'LastName' => $info['lastName']
             ]);
             $data = [
-                "proProfileId" => $pro->id,
+                "proProfileId" => $pro->ProfessionalProfileId,
                 "user" => $user
             ];
-        }
-        $response = json_encode([
-            "apiCode"  =>  200,
-            "message"  =>  "User saved successfully",
+        }            
+
+        $response = [
+            "apiCode" => 200,
+            "message" => "User saved successfully",
             "exceptionWrappers" => null,
-            "data" =>  $data
-        ]);
-        return response($response)
+            "data" => $data
+        ];
+
+        return response()->json($response, 200, [], JSON_NUMERIC_CHECK)
             ->header('Access-Control-Expose-Headers', 'X-Auth-Token, filename')
             ->header('Expires', 0)
             ->header('Pragma', 'no-cache')

@@ -44,6 +44,6 @@ class User extends Authenticatable
     protected $table = 'HADMIN.UserTable';
     public $timestamps = false;
 
-    const CREATED_AT = 'createdDate';
-    const UPDATED_AT = 'modifiedDate';
+    const created_at = 'createdDate';
+    const updated_at = 'modifiedDate';
 }

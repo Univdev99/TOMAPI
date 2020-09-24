@@ -52,6 +52,10 @@ class ComponentController extends Controller
                 "data" => $array
             ];
         }        
-        return response()->json($response);
+        return response()->json($response)
+            ->header('Access-Control-Expose-Headers', 'X-Auth-Token, filename') 
+            ->header('Expires', 0)
+            ->header('Pragma', 'no-cache')
+            ->header('X-Auth-Token', 'lgauT75djc2NeCkowJsLMBhfBL8adNBx57V0ES3XAzE=');
     }
 }

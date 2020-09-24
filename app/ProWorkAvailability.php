@@ -17,4 +17,14 @@ class ProWorkAvailability extends Model
         "professionalProfileId",
     ];
     public $timestamps = false;
+
+    public function toArray() {
+        $array = parent::toArray();
+        $newArray = array();
+        foreach($array as $name => $value){
+            $newArray[lcfirst($name)] = $value;
+        }
+        return $newArray;
+    }
+
 }
